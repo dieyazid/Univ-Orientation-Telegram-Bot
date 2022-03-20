@@ -1,2 +1,2 @@
 # Telegram-Bot
-BotName: lets_chooseBot
+Bot Tag: lets_chooseBot
