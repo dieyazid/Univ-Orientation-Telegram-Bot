@@ -75,11 +75,30 @@ def second_menu_keyboard():
 
 def third_menu_keyboard():
   keyboard = [
-    [InlineKeyboardButton('you good', callback_data='good')],
+    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
+    [InlineKeyboardButton('Between 10 and 14', callback_data='10<G<14')],
+    [InlineKeyboardButton('14 or more', callback_data='G>14')],
     [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
               ]
   return InlineKeyboardMarkup(keyboard)
 
+def forth_menu_keyboard():
+  keyboard = [
+    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
+    [InlineKeyboardButton('Between 10 and 14', callback_data='10<G<14')],
+    [InlineKeyboardButton('14 or more', callback_data='G>14')],
+    [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
+              ]
+  return InlineKeyboardMarkup(keyboard)
+
+def fifth_menu_keyboard():
+  keyboard = [
+    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
+    [InlineKeyboardButton('Between 10 and 12', callback_data='10<G<12')],
+    [InlineKeyboardButton('12 or more', callback_data='G>12')],
+    [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
+              ]
+  return InlineKeyboardMarkup(keyboard)
 ############################Specialities########################################
 
 def save(update,context):
@@ -99,6 +118,16 @@ def redirect(query,i):
     query.edit_message_text(text=second_question(),reply_markup=second_menu_keyboard())
   if(i==2):
     query.edit_message_text(text=third_question(),reply_markup=third_menu_keyboard())
+  if(i==3):
+    query.edit_message_text(text=forth_question(),reply_markup=forth_menu_keyboard())
+  if(i==4):
+    if(Answers[0] != "Literature and Philosophy" and Answers[0] != "Foreign languages"):
+      query.edit_message_text(text=fifth_question(),reply_markup=fifth_menu_keyboard())
+    else:
+      questioncounter.i+=1
+      redirect(query,questioncounter.i)
+  if(i==5):
+    print("coming soon!...")
 
 ############################# Messages #########################################
 def main_welcome():
@@ -117,8 +146,13 @@ def second_question():
   return 'What was your score in BAC?'
 
 def third_question():
-  return 'What was your score in BAC?'
+  return 'What is your grade average in English?'
 
+def forth_question():
+  return 'What is your grade average in French?'
+
+def fifth_question():
+  return 'What is your grade average in Math?'
 ############################# Handlers #########################################
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('about', about))
@@ -145,6 +179,13 @@ updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='16-17'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='17-18'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='18-19'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='19+'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G<10'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='10<G<14'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G>14'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='10<G<12'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G>12'))
+
 
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='good'))
 updater.start_polling()
