@@ -1,29 +1,55 @@
 from telegram.ext.updater import Updater
 from telegram.ext import CommandHandler, CallbackQueryHandler
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
+import pickle
+
+from expert import getdata
 
 updater = Updater('5192566556:AAGkSw2h6tK7YXn4DsKA1R5qtSAh6CpVB7k', use_context=True)
 
 Answers=[]
-class questioncounter:
-      i=0
-##Hello
+Users=[]
+class counter():
+      user=0
+token=[]
+qcounter=[]
 ############################### Bot ############################################
 print("Bot Started...")
 def start(update, context):
+  chat_id=update.message.chat_id
+  if chat_id not in Users:
+    Users.append(chat_id)
+    token.append([])
+    token[counter.user].append(chat_id)
+    token[counter.user].append(counter.user)
+    counter.user+=1
+    Answers.append([])
+    qcounter.append(0)
+  else:
+      Clear(chat_id)
+  print(token)
   update.message.reply_text(main_welcome(),reply_markup=main_menu_keyboard())
   
 def main_menu(update,context):
   query = update.callback_query
+  chat_id=query.message.chat_id
+  Clear(chat_id)
   query.answer()
   query.edit_message_text(text=main_welcome(),reply_markup=main_menu_keyboard())
 
+def Clear(chatid):
+  for e in range (0,len(token)):
+    if chatid==token[e][0]:
+      case = token[e][1]
+      Answers[case].clear()
+      qcounter[case]=0
+  with open('objs.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
+    pickle.dump([token], f)
+  
 def first_menu(update,context):
-  Answers.clear()
-  questioncounter.i=0
   query = update.callback_query
   query.answer()
-  query.edit_message_text(text=first_question(),reply_markup=first_menu_keyboard())
+  query.edit_message_text(text=score_question(),reply_markup=score_keyboard())
 
 def about(update,context):
   query = update.callback_query
@@ -49,7 +75,7 @@ def Nothing():
   keyboard = [[InlineKeyboardButton('✌🏼', callback_data='Main')],]
   return InlineKeyboardMarkup(keyboard)
 
-def first_menu_keyboard():
+def Speciality_keyboard():
   keyboard = [[InlineKeyboardButton('Sciences', callback_data='Science')],
               [InlineKeyboardButton('Mathematics', callback_data='Math')],
               [InlineKeyboardButton('mathematical technique', callback_data='Math Tech')],
@@ -59,7 +85,7 @@ def first_menu_keyboard():
               [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]]
   return InlineKeyboardMarkup(keyboard)
 
-def second_menu_keyboard():
+def score_keyboard():
   keyboard = [[InlineKeyboardButton('10-11', callback_data='10-11')],
               [InlineKeyboardButton('11-12', callback_data='11-12')],
               [InlineKeyboardButton('12-13', callback_data='12-13')],
@@ -73,62 +99,68 @@ def second_menu_keyboard():
               [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]]
   return InlineKeyboardMarkup(keyboard)
 
-def third_menu_keyboard():
+def English_keyboard():
   keyboard = [
-    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
-    [InlineKeyboardButton('Between 10 and 14', callback_data='10<G<14')],
-    [InlineKeyboardButton('14 or more', callback_data='G>14')],
+    [InlineKeyboardButton('Bad "Less than 10"', callback_data='BadatEnglish')],
+    [InlineKeyboardButton('Good "10 to 14"', callback_data='GoodatEnglish')],
+    [InlineKeyboardButton('Great "14+"', callback_data='GreatatEnglish')],
     [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
               ]
   return InlineKeyboardMarkup(keyboard)
 
-def forth_menu_keyboard():
+def French_keyboard():
   keyboard = [
-    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
-    [InlineKeyboardButton('Between 10 and 14', callback_data='10<G<14')],
-    [InlineKeyboardButton('14 or more', callback_data='G>14')],
+    [InlineKeyboardButton('Bad (Less than 10) "I mean what is French?" ', callback_data='BadatFrench')],
+    [InlineKeyboardButton('Good (10 to 14) "comment tu tappelles 🥐🥖?"', callback_data='GoodatFrench')],
+    [InlineKeyboardButton('Great "14+"', callback_data='GreatatFrench')],
     [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
               ]
   return InlineKeyboardMarkup(keyboard)
 
-def fifth_menu_keyboard():
+def Math_keyboard():
   keyboard = [
-    [InlineKeyboardButton('Less than 10', callback_data='G<10')],
-    [InlineKeyboardButton('Between 10 and 12', callback_data='10<G<12')],
-    [InlineKeyboardButton('12 or more', callback_data='G>12')],
+    [InlineKeyboardButton('I cant do math (Less than 10)', callback_data='BadatMath')],
+    [InlineKeyboardButton('Not bad (10 to 12)', callback_data='GoodatMath')],
+    [InlineKeyboardButton('al-Khwarizmi 👳 (12+)', callback_data='GreatatMath')],
     [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
               ]
   return InlineKeyboardMarkup(keyboard)
 ############################Specialities########################################
 
 def save(update,context):
-  print(questioncounter.i)
   query = update.callback_query
+  chat_id=query.message.chat_id
   context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖:Your answer was {}.".format(query.data))
-  Answers.append(str(query.data))
-  questioncounter.i+=1
+  for e in range (0,len(token)):
+    if chat_id==token[e][0]:
+      case = token[e][1]
+      Answers[case].append(str(query.data))
+
+  qcounter[case]+=1
   print(Answers)
-  redirect(query,questioncounter.i)
+  redirect(query,qcounter[case],case,context)
 
 ################################### Menu's######################################
-def redirect(query,i):
+def redirect(query,i,case,context):
   if(i==0):
-    query.edit_message_text(text=first_question(),reply_markup=first_menu_keyboard())
+    query.edit_message_text(text=score_question(),reply_markup=score_keyboard())
   if(i==1):
-    query.edit_message_text(text=second_question(),reply_markup=second_menu_keyboard())
+    query.edit_message_text(text=Speciality_question(),reply_markup=Speciality_keyboard())
   if(i==2):
-    query.edit_message_text(text=third_question(),reply_markup=third_menu_keyboard())
+    query.edit_message_text(text=English_question(),reply_markup=English_keyboard())
   if(i==3):
-    query.edit_message_text(text=forth_question(),reply_markup=forth_menu_keyboard())
+    query.edit_message_text(text=French_question(),reply_markup=French_keyboard())
   if(i==4):
-    if(Answers[0] != "Literature and Philosophy" and Answers[0] != "Foreign languages"):
-      query.edit_message_text(text=fifth_question(),reply_markup=fifth_menu_keyboard())
+    if(Answers[case][0] != "Literature and Philosophy" and Answers[case][0] != "Foreign languages"):
+      query.edit_message_text(text=Math_question(),reply_markup=Math_keyboard())
     else:
-      questioncounter.i+=1
-      redirect(query,questioncounter.i)
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
   if(i==5):
-    print("coming soon!...")
-
+    message=getdata(Answers[case])
+    print(message)
+    context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖:Your {}.".format(message))
+    
 ############################# Messages #########################################
 def main_welcome():
   return 'Hi how can i help you?'
@@ -139,20 +171,29 @@ def abouttext():
 def nvmtext():
   return 'Alright you can reach me anytime using " /start " have a great day 😄 '
 
-def first_question():
+def Speciality_question():
   return 'What is your major in baccalaureate?'
 
-def second_question():
+def score_question():
   return 'What was your score in BAC?'
 
-def third_question():
-  return 'What is your grade average in English?'
+def English_question():
+  return 'What best describes your English🇬🇧 grades?'
 
-def forth_question():
-  return 'What is your grade average in French?'
+def French_question():
+  return 'What best describes your French🇫🇷 grades?'
 
-def fifth_question():
-  return 'What is your grade average in Math?'
+def Math_question():
+  return 'What best describes your Math📐 grades ?'
+
+def Arabic_question():
+  return 'What best describes your Arabic🇩🇿 grades?'
+
+def Physics_question():
+  return 'What best describes your Physics🌡️ grades?'
+
+def Science_question():
+  return 'What best describes your Sciences🔬 grades?'
 ############################# Handlers #########################################
 updater.dispatcher.add_handler(CommandHandler('start', start))
 updater.dispatcher.add_handler(CommandHandler('about', about))
@@ -180,11 +221,15 @@ updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='17-18'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='18-19'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='19+'))
 
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G<10'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='10<G<14'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G>14'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='10<G<12'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='G>12'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatEnglish'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatEnglish'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatEnglish'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatFrench'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatFrench'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatFrench'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatMath'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatMath'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatMath'))
 
 
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='good'))
