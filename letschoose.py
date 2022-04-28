@@ -75,6 +75,10 @@ def Nothing():
   keyboard = [[InlineKeyboardButton('✌🏼', callback_data='Main')],]
   return InlineKeyboardMarkup(keyboard)
 
+def Thanks():
+  keyboard = [[InlineKeyboardButton('Thank you for interacting with me.Hope that i helped you🙋', callback_data='Main')],]
+  return InlineKeyboardMarkup(keyboard)
+
 def score_keyboard():
   keyboard = [[InlineKeyboardButton('10 To less than 12', callback_data='10-12')],
               [InlineKeyboardButton('12 To less than 14', callback_data='12-14')],
@@ -137,7 +141,7 @@ def Science_keyboard():
               ]
   return InlineKeyboardMarkup(keyboard)
 
-def Islamic_keyboard():
+def ISL_keyboard():
   keyboard = [[InlineKeyboardButton('Less than 10', callback_data='BadatISL')],
               [InlineKeyboardButton('10 to less than 14', callback_data='GoodatISL')],
               [InlineKeyboardButton('14 or more', callback_data='GreatatISL')],
@@ -160,7 +164,7 @@ def Philo_keyboard():
               ]
   return InlineKeyboardMarkup(keyboard)
 
-def Technologie_keyboard():
+def Tech_keyboard():
   keyboard = [[InlineKeyboardButton('Less than 10', callback_data='BadatTech')],
               [InlineKeyboardButton('10 to less than 14', callback_data='GoodatTech')],
               [InlineKeyboardButton('14 or more', callback_data='GreatatTech')],
@@ -194,7 +198,7 @@ def Arabic_keyboard():
 def save(update,context):
   query = update.callback_query
   chat_id=query.message.chat_id
-  context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖:Your answer was {}.".format(query.data))
+  # context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖:Your answer was {}.".format(query.data))
   for e in range (0,len(token)):
     if chat_id==token[e][0]:
       case = token[e][1]
@@ -211,19 +215,57 @@ def redirect(query,i,case,context):
   if(i==1):
     query.edit_message_text(text=Speciality_question(),reply_markup=Speciality_keyboard())
   if(i==2):
-    query.edit_message_text(text=English_question(),reply_markup=English_keyboard())
-  if(i==3):
-    query.edit_message_text(text=French_question(),reply_markup=French_keyboard())
-  if(i==4):
-    if(Answers[case][0] != "Literature and Philosophy" and Answers[case][0] != "Foreign languages"):
+    if(Answers[case][1] != "Literature and Philosophy" and Answers[case][1] != "Foreign languages"):
       query.edit_message_text(text=Math_question(),reply_markup=Math_keyboard())
     else:
       qcounter[case]+=1
       redirect(query,qcounter[case],case,context)
+  if(i==3):
+    if(Answers[case][1] != "Literature and Philosophy" and Answers[case][1] != "Foreign languages" and Answers[case][1] != "Management and Economy"):
+      query.edit_message_text(text=Physics_question(),reply_markup=Physics_keyboard())
+    else:
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
+  if(i==4):
+    query.edit_message_text(text=English_question(),reply_markup=English_keyboard())
   if(i==5):
+    query.edit_message_text(text=French_question(),reply_markup=French_keyboard())
+  if(i==6):
+    if(Answers[case][1] == "Math" and Answers[case][1] == "Science"):
+      query.edit_message_text(text=Science_question(),reply_markup=Science_keyboard())
+    else:
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
+  if(i==7):
+    query.edit_message_text(text=ISL_question(),reply_markup=ISL_keyboard())
+  if(i==8):
+    query.edit_message_text(text=His_Geo_question(),reply_markup=His_Geo_keyboard())
+  if(i==9):
+    query.edit_message_text(text=Philo_question(),reply_markup=Philo_keyboard())
+  if(i==10):
+    if(Answers[case][1]=="Math Tech"):
+      query.edit_message_text(text=Tech_question(),reply_markup=Tech_keyboard())
+    else:
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
+  if(i==11):
+    if(Answers[case][1] == "Management and Economy"):
+      query.edit_message_text(text=Management_question(),reply_markup=Management_keyboard())
+    else:
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
+  if(i==12):
+    if(Answers[case][1] == "Management and Economy"):
+      query.edit_message_text(text=Economy_question(),reply_markup=Economy_keyboard())
+    else:
+      qcounter[case]+=1
+      redirect(query,qcounter[case],case,context)
+  if(i==13):
     message=getdata(Answers[case])
     print(message)
-    context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖:Your {}.".format(message))
+    # context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖: {}. ".format(message))
+    query.edit_message_text(text="🤖: {}. ".format(message),reply_markup=Thanks())
+
     
 ############################# Messages #########################################
 def main_welcome():
@@ -262,7 +304,7 @@ def ISL_question():
 def His_Geo_question():
   return 'What best describes your History and Geography🗾📜 grades?'
 
-def Philosophy_question():
+def Philo_question():
   return 'What best describes your Philosophy grades?'
 
 def Tech_question():
@@ -285,6 +327,10 @@ updater.dispatcher.add_handler(CallbackQueryHandler(first_menu, pattern='start')
 updater.dispatcher.add_handler(CallbackQueryHandler(about, pattern='about'))
 updater.dispatcher.add_handler(CallbackQueryHandler(nvm, pattern='Nevermind'))
 
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='10-12'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='12-14'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='14+'))
+
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Science'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Math'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Math Tech'))
@@ -292,9 +338,13 @@ updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Literature and
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Foreign languages'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Management and Economy'))
 
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='10-12'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='12-14'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='14+'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatMath'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatMath'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatMath'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatPhysics'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatPhysics'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatPhysics'))
 
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatEnglish'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatEnglish'))
@@ -304,9 +354,37 @@ updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatFrench')
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatFrench'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatFrench'))
 
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatMath'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatMath'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatMath'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatScience'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatScience'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatScience'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatISL'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatISL'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatISL'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatHG'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatHG'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatHG'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatPhilo'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatPhilo'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatPhilo'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatTech'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatTech'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatTech'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatMG'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatMG'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatMG'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatEC'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatEC'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatEC'))
+
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatArabic'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatArabic'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GreatatArabic'))
 
 updater.dispatcher.add_handler(CallbackQueryHandler(main_menu, pattern='Main'))
 
