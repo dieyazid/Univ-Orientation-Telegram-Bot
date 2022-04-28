@@ -8,7 +8,7 @@ class info(Fact):
     pass
 
 class Score(KnowledgeEngine):
-    @Rule(info(Answer="13-14"))
+    @Rule(info(Answer="12-14"))
     def BadMath(self):
         Message.message = "+14 Nicccceee"
 
@@ -29,7 +29,7 @@ class Major(KnowledgeEngine):
         Message.message = "Why?"
 
 class Science(KnowledgeEngine):
-    @Rule(info(Answer="13-14"))
+    @Rule(info(Answer="12-14"))
     def BadMath(self):
         Message.message = "+14 Nicccceee"
                 
@@ -41,4 +41,3 @@ def getdata(data):
     engine.declare(info(Answer=Message.data[0]))
     engine.run()
     return Message.message
-    

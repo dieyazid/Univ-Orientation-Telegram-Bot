@@ -43,8 +43,6 @@ def Clear(chatid):
       case = token[e][1]
       Answers[case].clear()
       qcounter[case]=0
-  with open('objs.pkl', 'wb') as f:  # Python 3: open(..., 'wb')
-    pickle.dump([token], f)
   
 def first_menu(update,context):
   query = update.callback_query
@@ -60,6 +58,8 @@ def nvm(update,context):
   query = update.callback_query
   query.answer()
   query.edit_message_text(text=nvmtext(),reply_markup=Nothing())
+
+
 ############################ Keyboards #########################################
 def main_menu_keyboard():
   keyboard = [[InlineKeyboardButton('Start the chat🏁', callback_data='start')],
@@ -86,16 +86,9 @@ def Speciality_keyboard():
   return InlineKeyboardMarkup(keyboard)
 
 def score_keyboard():
-  keyboard = [[InlineKeyboardButton('10-11', callback_data='10-11')],
-              [InlineKeyboardButton('11-12', callback_data='11-12')],
-              [InlineKeyboardButton('12-13', callback_data='12-13')],
-              [InlineKeyboardButton('13-14', callback_data='13-14')],
-              [InlineKeyboardButton('14-15', callback_data='14-15')],
-              [InlineKeyboardButton('15-16', callback_data='15-16')],
-              [InlineKeyboardButton('16-17', callback_data='16-17')],
-              [InlineKeyboardButton('17-18', callback_data='17-18')],
-              [InlineKeyboardButton('18-19', callback_data='18-19')],
-              [InlineKeyboardButton('19+', callback_data='19+')],
+  keyboard = [[InlineKeyboardButton('10 To 12', callback_data='10-12')],
+              [InlineKeyboardButton('12 To 14', callback_data='12-14')],
+              [InlineKeyboardButton('14+', callback_data='14+')],
               [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]]
   return InlineKeyboardMarkup(keyboard)
 
@@ -122,6 +115,24 @@ def Math_keyboard():
     [InlineKeyboardButton('I cant do math (Less than 10)', callback_data='BadatMath')],
     [InlineKeyboardButton('Not bad (10 to 12)', callback_data='GoodatMath')],
     [InlineKeyboardButton('al-Khwarizmi 👳 (12+)', callback_data='GreatatMath')],
+    [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
+              ]
+  return InlineKeyboardMarkup(keyboard)
+
+def Philo_keyboard():
+  keyboard = [
+    [InlineKeyboardButton('I\'m not into philosophy', callback_data='BadatPhilo')],
+    [InlineKeyboardButton('I\'m quiet Good', callback_data='GoodatPhilo')],
+    [InlineKeyboardButton('I\'m the new Socrates🤔', callback_data='GreatatPhilo')],
+    [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
+              ]
+  return InlineKeyboardMarkup(keyboard)
+
+def Arabic_keyboard():
+  keyboard = [
+    [InlineKeyboardButton('Less than 10  ', callback_data='BadatArabic')],
+    [InlineKeyboardButton('Good (10 to 14)🙋🏻‍♂️ مرحبا"', callback_data='GoodatArabic')],
+    [InlineKeyboardButton('Great "14+"', callback_data='GreatatArabic')],
     [InlineKeyboardButton('Main menu⬅️', callback_data='Main')]
               ]
   return InlineKeyboardMarkup(keyboard)
@@ -210,16 +221,16 @@ updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Literature and
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Foreign languages'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='Management and Economy'))
 
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='10-11'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='11-12'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='12-13'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='13-14'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='14-15'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='15-16'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='16-17'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='17-18'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='18-19'))
-updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='19+'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='10-12'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='12-14'))
+updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='14+'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='13-14'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='14-15'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='15-16'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='16-17'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='17-18'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='18-19'))
+# updater.dispatcher.add_handler(CallbackQueryHandler(save,pattern='19+'))
 
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='BadatEnglish'))
 updater.dispatcher.add_handler(CallbackQueryHandler(save, pattern='GoodatEnglish'))
