@@ -272,7 +272,7 @@ def main_welcome():
   return 'Hi how can i help you?'
 
 def abouttext():
-  return "I'm a Bot created by three Computer Science students. My job is to help you decide your future, i will give you a choice that might fits you but always remember 'Choose what you like not what others like'"
+  return "I'm a Bot Nice to meet me . My job is to help you decide your next step, i will give you a choice that might fits you"
 
 def nvmtext():
   return 'Alright you can reach me anytime using " /start " have a great day 😄 '

@@ -246,9 +246,11 @@ def Answer():
 
     Match.Matchcounter=0
 
+    Redirect()
+    
     Match.Mifullmatch=Match.Stfullmatch=Match.Enfullmatch=Match.Frfullmatch=Match.Msfullmatch=Match.Mdfullmatch=Match.Ecfullmatch=Match.Bifullmatch=Match.Hsfullmatch=Match.Lwfullmatch=False
     
-    Redirect()
+    
 
 def Redirect():
     if(Message.data[1]=="Science" or Message.data[1]=="Math" or Message.data[1]=="Math Tech"):
@@ -279,8 +281,7 @@ def Redirect():
                                         if(Match.Frfullmatch ):
                                             Message.message="Based on your answers i think you can go for French🇫🇷.\n check this link to know more about it\n https://ume.la/fN8Adv"
                                         else:
-                                            if(Match.Lwfullmatch ):
-                                                Message.message="Based on your answers i think you can go for Law and political science⚖️.\ncheck this link to know more about it\n https://ume.la/RMCz9q"
+                                            Message.message="Based on your answers i think you can go for Law and political science⚖️.\ncheck this link to know more about it\n https://ume.la/RMCz9q"
     else:
         if(Match.Ecfullmatch and Message.data[1]=="Management and Economy"):
             Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.\n check this link to know more about it\n https://ume.la/RHqLrM"
