@@ -2,53 +2,286 @@
 from experta import *
 class Message():
     message=""
-    data=[]
+    data=[0]*15
+class Match():
+    Matchcounter=0
+    Mifullmatch=Stfullmatch=Enfullmatch=Frfullmatch=Msfullmatch=Mdfullmatch=Ecfullmatch=Bifullmatch=Hsfullmatch=Lwfullmatch=False
 
 class info(Fact):
     pass
+        
+class MI(KnowledgeEngine):
+    @Rule(info(Answer="Math>=12"))
+    def Math(self):
+        Match.Matchcounter+=1
 
-class Score(KnowledgeEngine):
+class ST(KnowledgeEngine):
+    @Rule(info(Answer="10<=Math<12") or info(Answer="Math>=12"))
+    def Math(self):
+        Match.Matchcounter+=1
+    @Rule(info(Answer="10<=Physics<12") or info(Answer="Physics>=12"))
+    def Physics(self):
+        Match.Matchcounter+=1
+
+    @Rule(info(Answer="10<=Tech<12") or info(Answer="Tech>=12"))
+    def Technology(self):
+        Match.Matchcounter+=1
+
+class MD(KnowledgeEngine):
+    @Rule(info(Answer="Physics>=12"))
+    def Physics(self):
+        Match.Matchcounter+=1
+    @Rule(info(Answer="Science>=12"))
+    def Science(self):
+        Match.Matchcounter+=1
+
+class EC(KnowledgeEngine):
+    @Rule(info(Answer="10<=Math<12") or info(Answer="Math>=12"))
+    def Math(self):
+        Match.Matchcounter+=1
+
+    @Rule(info(Answer="EC>=14"))
+    def Economy(self):
+        Match.Matchcounter+=1
     
-    @Rule(info(Answer="10-12"))
-    def Tenplus(self):
-        Message.message = "Are you okay?"
-    
-    @Rule(info(Answer="12-14"))
-    def TwelvePlus(self):
-        Message.message = "Good Grades"
+    @Rule(info(Answer="MG>=14"))
+    def Management(self):
+        Match.Matchcounter+=1
 
-    @Rule(info(Answer="14+"))
-    def FourteenPlus(self):
-        Message.message = "Nice Grades"
+class EN(KnowledgeEngine):
+    @Rule(info(Answer="English>=14"))
+    def English(self):
+        Match.Matchcounter+=1
+    if(Message.data[1]=="Literature and Philosophy" or Message.data[1]=="Foreign languages"):
+        @Rule(info(Answer="10<=English<=14"))
+        def English_(self):
+            Match.Matchcounter+=1
 
-# class Major(KnowledgeEngine):
-#     @Rule(info(Answer="Science"))
-#     def Science(self):
-#         engine = Science()
-#         engine.reset()
-#         engine.declare(info(Answer=Message.data[1]))
-#         engine.run()
+class FR(KnowledgeEngine):
+    @Rule(info(Answer="English>=14"))
+    def French(self):
+        Match.Matchcounter+=1
+    if(Message.data[1]=="Literature and Philosophy" or Message.data[1]=="Foreign languages"):
+        @Rule(info(Answer="10<=English<=14"))
+        def French_(self):
+            Match.Matchcounter+=1
 
-#     @Rule(info(Answer="Math"))
-#     def Math(self):
-#         Message.message = "Math?"
+class MS(KnowledgeEngine):
+    @Rule(info(Answer="Science>=12"))
+    def Science(self):
+        Match.Matchcounter+=1
 
-#     @Rule(info(Answer="Bad"))
-#     def BadMath(self):
-#         Message.message = "Why?"
+class BI(KnowledgeEngine):
+    @Rule(info(Answer="10<=Science<12") or info(Answer="Science>=12"))
+    def Science(self):
+        Match.Matchcounter+=1
 
-# class Science(KnowledgeEngine):
-#     @Rule(info(Answer="12-14"))
-#     def BadMath(self):
-#         Message.message = "+14 Nicccceee"
-                
-engine = Score()
-engine.reset()
-
+class HS(KnowledgeEngine):
+    @Rule(info(Answer="ISL>=14"))
+    def Islamic_law(self):
+        Match.Matchcounter+=1
+    @Rule(info(Answer="HG>=14"))
+    def His_Geo(self):
+        Match.Matchcounter+=1
+    @Rule(info(Answer="Philo>=14"))
+    def Philosophy(self):
+        Match.Matchcounter+=1
 def getdata(data):
-    print("over here!")
+    
     Message.data=data
-    print(Message.data[0])
-    engine.declare(info(Answer=str(Message.data[0])))
-    engine.run()
+    Answer()
+    # engine = Score()
+    # engine.reset()
+    # engine.declare(info(Answer=str(Message.data[0])))
+    # engine.run()
     return Message.message
+
+def Answer():
+
+    ##Mi Match
+    engine = MI()
+    engine.reset()
+    print(Message.data)
+    engine.declare(info(Answer=str(Message.data[2])))
+    engine.run()
+    if(Match.Matchcounter==1):
+        Match.Mifullmatch=True
+
+    Match.Matchcounter=0
+    
+    ##St Match
+    engine = ST()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[2])))
+    engine.run()
+    
+    engine.declare(info(Answer=str(Message.data[3])))
+    engine.run()
+
+    if(Message.data[1]=="Math Tech"):
+        engine.declare(info(Answer=str(Message.data[8])))
+        engine.run()
+    
+    if(Match.Matchcounter>=2):
+        Match.Stfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##Medecine Match
+    if(Message.data[0]=="Bac>=14"):
+        engine = MD()
+        engine.reset()
+
+        engine.declare(info(Answer=str(Message.data[3])))
+        engine.run()
+        
+        engine.declare(info(Answer=str(Message.data[6])))
+        engine.run()
+        
+        if(Match.Matchcounter>=1):
+            Match.Mdfullmatch=True
+        
+        Match.Matchcounter=0
+
+    ##Economics Commerce Science  Match
+    engine = EC()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[2])))
+    engine.run()
+    
+    if(Message.data[1]=="Management and Economy"):
+        engine.declare(info(Answer=str(Message.data[9])))
+        engine.run()
+
+        engine.declare(info(Answer=str(Message.data[10])))
+        engine.run()
+        if(Match.Matchcounter>=2):
+            Match.Ecfullmatch=True
+    else:
+        if(Match.Matchcounter==1):
+            Match.Ecfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##English
+    engine = EN()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[4])))
+    engine.run()
+    
+    if(Match.Matchcounter==1):
+        Match.Enfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##French
+    engine = FR()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[4])))
+    engine.run()
+    
+    if(Match.Matchcounter==1):
+        Match.Frfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##Biology
+    engine = BI()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[6])))
+    engine.run()
+    
+    if(Match.Matchcounter==1):
+        Match.Bifullmatch=True
+
+    Match.Matchcounter=0
+
+    ##Material Science
+    engine = MS()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[6])))
+    engine.run()
+    
+    if(Match.Matchcounter==1):
+        Match.Msfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##Human and Social Science
+    engine = HS()
+    engine.reset()
+
+    engine.declare(info(Answer=str(Message.data[6])))
+    engine.run()
+
+    engine.declare(info(Answer=str(Message.data[7])))
+    engine.run()
+
+    engine.declare(info(Answer=str(Message.data[8])))
+    engine.run()
+    
+    if(Match.Matchcounter==1):
+        Match.Hsfullmatch=True
+
+    Match.Matchcounter=0
+
+    ##Law
+    Match.Lwfullmatch=True
+
+    Match.Matchcounter=0
+
+    Redirect()
+
+def Redirect():
+    if(Message.data[1]=="Science" or Message.data[1]=="Math" or Message.data[1]=="Math Tech"):
+        if(Match.Mdfullmatch):
+            Message.message="Based on your answers i think you can go for Medecine. You can be a great Doctor🧑‍⚕️. check this link below to know more about it\n https://ume.la/i94q4E"
+        else:        
+            if(Match.Mifullmatch):
+                Message.message="Based on your answers i think you can go for Mathematics and Computer Science and maybe oneday you'll code more friends for me 🫠. check this link below to know more about it\n"
+            else:
+                if(Match.Stfullmatch):
+                    Message.message="Based on your answers i think you can go for Science and Technology🧪.check this link to know more about it\n"
+                else:
+                    if(Match.Msfullmatch and Message.data[1]!="Math Tech"):
+                        Message.message="Based on your answers i think you can go for Material Science🧫.check this link to know more about it\n"
+                    else:
+                        if(Match.Ecfullmatch):
+                            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.check this link to know more about it\n"
+                        else:
+                            if(Match.Bifullmatch and Message.data[1]!="Math Tech"):
+                                Message.message="Based on your answers i think you can go for Biology 🧬.check this link to know more about it\n"
+                            else:
+                                if(Match.Enfullmatch ):
+                                    Message.message="Based on your answers i think you can go for English 🇬🇧.check this link to know more about it\n"
+                                else:
+                                    if(Match.Hsfullmatch ):
+                                        Message.message="Based on your answers i think you can go for Human Sciences 📑 .check this link to know more about it\n"
+                                    else:
+                                        if(Match.Frfullmatch ):
+                                            Message.message="Based on your answers i think you can go for French🇫🇷.check this link to know more about it\n"
+                                        else:
+                                            if(Match.Lwfullmatch ):
+                                                Message.message="Based on your answers i think you can go for Law and political science⚖️.check this link to know more about it\n"
+    else:
+        if(Match.Ecfullmatch and Message.data[1]=="Management and Economy"):
+            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.check this link to know more about it\n"
+        else:
+            if(Match.Hsfullmatch ):
+                Message.message="Based on your answers i think you can go for Human Sciences 📑 .check this link to know more about it\n"
+            else:
+                if(Match.Lwfullmatch ):
+                    Message.message="Based on your answers i think you can go for Law and political science⚖️.check this link to know more about it\n"
+                else:
+                    if(Match.Enfullmatch ):
+                        Message.message="Based on your answers i think you can go for English 🇬🇧.check this link to know more about it\n"
+                    else:
+                        if(Match.Frfullmatch ):
+                            Message.message="Based on your answers i think you can go for French🇫🇷.check this link to know more about it\n"
+            
