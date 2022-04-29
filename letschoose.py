@@ -231,7 +231,7 @@ def redirect(query,i,case,context):
   if(i==5):
     query.edit_message_text(text=French_question(),reply_markup=French_keyboard())
   if(i==6):
-    if(Answers[case][1] == "Math" and Answers[case][1] == "Science"):
+    if(Answers[case][1] == "Math" or Answers[case][1] == "Science"):
       query.edit_message_text(text=Science_question(),reply_markup=Science_keyboard())
     else:
       qcounter[case]+=1
@@ -276,46 +276,46 @@ def abouttext():
 
 def nvmtext():
   return 'Alright you can reach me anytime using " /start " have a great day 😄 '
-
+#0
 def score_question():
   return 'What was your score in BAC?'
-
+#1
 def Speciality_question():
   return 'What is your major in baccalaureate?'
-
+#2
 def Math_question():
   return 'What best describes your Math📐 grades ?'
-
+#3
 def Physics_question():
   return 'What best describes your Physics🌡️ grades?'
-
+#4
 def English_question():
   return 'What best describes your English🇬🇧 grades?'
-
+#5
 def French_question():
   return 'What best describes your French🇫🇷 grades?'
-
+#6
 def Science_question():
   return 'What best describes your Sciences🔬 grades?'
-
+#7
 def ISL_question():
   return 'What best describes your Islamic Law ☪️ grades?'
-
+#8
 def His_Geo_question():
   return 'What best describes your History and Geography🗾📜 grades?'
-
+#9
 def Philo_question():
   return 'What best describes your Philosophy grades?'
-
+#10
 def Tech_question():
   return 'What best describes your Technology grades?'
-
+#11
 def Management_question():
   return 'What best describes your Management grades?'
-
+#12
 def Economy_question():
   return 'What best describes your Economy grades?'
-
+#13
 def Arabic_question():
   return 'What best describes your Arabic🇩🇿 grades?'
 

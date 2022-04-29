@@ -1,5 +1,7 @@
 
+from email import message
 from experta import *
+from telegram import MaskPosition
 class Message():
     message=""
     data=[0]*15
@@ -106,6 +108,7 @@ def Answer():
     engine.run()
     if(Match.Matchcounter==1):
         Match.Mifullmatch=True
+        print(Match.Mifullmatch)
 
     Match.Matchcounter=0
     
@@ -150,12 +153,12 @@ def Answer():
 
     engine.declare(info(Answer=str(Message.data[2])))
     engine.run()
-    
+
     if(Message.data[1]=="Management and Economy"):
-        engine.declare(info(Answer=str(Message.data[9])))
+        engine.declare(info(Answer=str(Message.data[8])))
         engine.run()
 
-        engine.declare(info(Answer=str(Message.data[10])))
+        engine.declare(info(Answer=str(Message.data[9])))
         engine.run()
         if(Match.Matchcounter>=2):
             Match.Ecfullmatch=True
@@ -216,14 +219,21 @@ def Answer():
     ##Human and Social Science
     engine = HS()
     engine.reset()
-
-    engine.declare(info(Answer=str(Message.data[6])))
+    if(Message.data[1]=="Foreign languages" or Message.data[1]=="Literature and Philosophy"):
+        answerindex=4
+    if(Message.data[1]=="Management and Economy"):
+        answerindex=5
+    if(Message.data[1]=="Math Tech"):
+        answerindex=6
+    else:
+        answerindex=7
+    engine.declare(info(Answer=str(Message.data[answerindex])))
     engine.run()
 
-    engine.declare(info(Answer=str(Message.data[7])))
+    engine.declare(info(Answer=str(Message.data[answerindex+1])))
     engine.run()
 
-    engine.declare(info(Answer=str(Message.data[8])))
+    engine.declare(info(Answer=str(Message.data[answerindex+2])))
     engine.run()
     
     if(Match.Matchcounter==1):
@@ -236,6 +246,8 @@ def Answer():
 
     Match.Matchcounter=0
 
+    Match.Mifullmatch=Match.Stfullmatch=Match.Enfullmatch=Match.Frfullmatch=Match.Msfullmatch=Match.Mdfullmatch=Match.Ecfullmatch=Match.Bifullmatch=Match.Hsfullmatch=Match.Lwfullmatch=False
+    
     Redirect()
 
 def Redirect():
@@ -244,44 +256,44 @@ def Redirect():
             Message.message="Based on your answers i think you can go for Medecine. You can be a great Doctor🧑‍⚕️. check this link below to know more about it\n https://ume.la/i94q4E"
         else:        
             if(Match.Mifullmatch):
-                Message.message="Based on your answers i think you can go for Mathematics and Computer Science and maybe oneday you'll code more friends for me 🫠. check this link below to know more about it\n"
+                Message.message="Based on your answers i think you can go for Mathematics and Computer Science and maybe oneday you'll code more friends for me 🫠.\n check this link below to know more about it\n https://ume.la/lnlS9U"
             else:
                 if(Match.Stfullmatch):
-                    Message.message="Based on your answers i think you can go for Science and Technology🧪.check this link to know more about it\n"
+                    Message.message="Based on your answers i think you can go for Science and Technology🧪.\n check this link to know more about it\n https://ume.la/y6ao8e"
                 else:
                     if(Match.Msfullmatch and Message.data[1]!="Math Tech"):
-                        Message.message="Based on your answers i think you can go for Material Science🧫.check this link to know more about it\n"
+                        Message.message="Based on your answers i think you can go for Material Science🧫.\n check this link to know more about it\n https://ume.la/TsKJ3A"
                     else:
                         if(Match.Ecfullmatch):
-                            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.check this link to know more about it\n"
+                            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.\n check this link to know more about it\n https://ume.la/RHqLrM"
                         else:
                             if(Match.Bifullmatch and Message.data[1]!="Math Tech"):
-                                Message.message="Based on your answers i think you can go for Biology 🧬.check this link to know more about it\n"
+                                Message.message="Based on your answers i think you can go for Biology 🧬.\n check this link to know more about it\n https://ume.la/uOQqyf"
                             else:
                                 if(Match.Enfullmatch ):
-                                    Message.message="Based on your answers i think you can go for English 🇬🇧.check this link to know more about it\n"
+                                    Message.message="Based on your answers i think you can go for English 🇬🇧.\n check this link to know more about it\n https://ume.la/GREHge"
                                 else:
                                     if(Match.Hsfullmatch ):
-                                        Message.message="Based on your answers i think you can go for Human Sciences 📑 .check this link to know more about it\n"
+                                        Message.message="Based on your answers i think you can go for Human Sciences 📑 .\n check this link to know more about it\n https://ume.la/3BgrUz"
                                     else:
                                         if(Match.Frfullmatch ):
-                                            Message.message="Based on your answers i think you can go for French🇫🇷.check this link to know more about it\n"
+                                            Message.message="Based on your answers i think you can go for French🇫🇷.\n check this link to know more about it\n https://ume.la/fN8Adv"
                                         else:
                                             if(Match.Lwfullmatch ):
-                                                Message.message="Based on your answers i think you can go for Law and political science⚖️.check this link to know more about it\n"
+                                                Message.message="Based on your answers i think you can go for Law and political science⚖️.\ncheck this link to know more about it\n https://ume.la/RMCz9q"
     else:
         if(Match.Ecfullmatch and Message.data[1]=="Management and Economy"):
-            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.check this link to know more about it\n"
+            Message.message="Based on your answers i think you can go for Economic, commercial, management sciences 🏦.\n check this link to know more about it\n https://ume.la/RHqLrM"
         else:
-            if(Match.Hsfullmatch ):
-                Message.message="Based on your answers i think you can go for Human Sciences 📑 .check this link to know more about it\n"
+            if(Match.Hsfullmatch):
+                Message.message="Based on your answers i think you can go for Human Sciences 📑 .\n check this link to know more about it\n https://ume.la/3BgrUz"
             else:
                 if(Match.Lwfullmatch ):
-                    Message.message="Based on your answers i think you can go for Law and political science⚖️.check this link to know more about it\n"
+                    Message.message="Based on your answers i think you can go for Law and political science⚖️.\ncheck this link to know more about it\n https://ume.la/RMCz9q"
                 else:
                     if(Match.Enfullmatch ):
-                        Message.message="Based on your answers i think you can go for English 🇬🇧.check this link to know more about it\n"
+                        Message.message="Based on your answers i think you can go for English 🇬🇧.\n check this link to know more about it\n https://ume.la/GREHge"
                     else:
                         if(Match.Frfullmatch ):
-                            Message.message="Based on your answers i think you can go for French🇫🇷.check this link to know more about it\n"
+                            Message.message="Based on your answers i think you can go for French🇫🇷.\n check this link to know more about it\n https://ume.la/fN8Adv"
             
