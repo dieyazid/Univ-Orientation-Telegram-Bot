@@ -1,7 +1,7 @@
 from telegram.ext.updater import Updater
 from telegram.ext import CommandHandler, CallbackQueryHandler
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup, User
-import pickle
+from datetime import datetime
 
 from expert import getdata
 
@@ -27,6 +27,10 @@ def start(update, context):
     qcounter.append(0)
   else:
       Clear(chat_id)
+  now = datetime.now()
+
+  current_time = now.strftime("%H:%M:%S")
+  print("Current Time   =", current_time)
   print(token)
   update.message.reply_text(main_welcome(),reply_markup=main_menu_keyboard())
   
@@ -205,7 +209,7 @@ def save(update,context):
       Answers[case].append(str(query.data))
 
   qcounter[case]+=1
-  print(Answers)
+  # print(Answers)
   redirect(query,qcounter[case],case,context)
 
 ################################### Menu's######################################
@@ -262,7 +266,7 @@ def redirect(query,i,case,context):
       redirect(query,qcounter[case],case,context)
   if(i==13):
     message=getdata(Answers[case])
-    print(message)
+    # print(message)
     # context.bot.sendMessage(chat_id=query.message.chat_id,text="🤖: {}. ".format(message))
     query.edit_message_text(text="🤖: {}. ".format(message),reply_markup=Thanks())
 
@@ -308,7 +312,7 @@ def Philo_question():
   return 'What best describes your Philosophy grades?'
 #10
 def Tech_question():
-  return 'What best describes your Technology grades?'
+  return 'As a Match Tech student there is a additional module that you study based on your speciality. What best describes your grades in it?'
 #11
 def Management_question():
   return 'What best describes your Management grades?'
