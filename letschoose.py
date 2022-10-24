@@ -5,7 +5,7 @@ from datetime import datetime
 #Hello
 from expert import getdata
 
-updater = Updater('5192566556:AAGkSw2h6tK7YXn4DsKA1R5qtSAh6CpVB7k', use_context=True)
+updater = Updater('Token in here', use_context=True)
 
 Answers=[]
 Users=[]
